@@ -117,6 +117,13 @@ export async function addCategory(formData: any) {
 
 ```typescript
 export async function editCategory(catId: number, newName: string) {
+  const isLogin: boolean = await isAuthenticted();
+  const hasPermission: boolean = await isAdmin();
+
+  if (!isLogin) redirect("/blahblah/...");
+
+  if (!hasPermission) redirect("/blahblah/..");
+
   const prisma = await getExtendedPrisma();
 
   await prisma.category.update({
@@ -446,9 +453,9 @@ Nested categories play a crucial role in enhancing user experiences and streamli
 
 ---
 
-**About the Author:** Phyo Pyae & Htet Aung - Full-stack Developers passionate about creating user-centric e-commerce solutions.
+**About the Author:** Phyo Pyae & Htet Aung
 
-**Contact:** <phyopyaemaung1@gmail.com> or <htetaung251220@gmail.com>
+**Contact:** <phyopyaemaung1@gmail.com> & <htetaung251220@gmail.com>
 
 **Tags:** E-commerce, Nested Categories, Category Management, [`Next.js`, `Prisma ORM`, `Next Auth`]
 
