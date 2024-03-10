@@ -1,48 +1,44 @@
-# Title: Simplifying Category Management in E-Commerce: A Comprehensive Guide to Nested Categories
+# Simplifying Category Management in E-Commerce: A Comprehensive Guide to Nested Categories
 
 ## Introduction
 
-Welcome to our comprehensive guide on nested categories in e-commerce! In this post, we'll delve deep into the implementation of nested categories in my personal project called, Mini-Ecommerce, an innovative platform that enhances user browsing experiences and streamlines administrative tasks. Whether you're a developer looking to optimize category management or seeking to improve your online store, this guide will provide you with valuable insights and practical implementation details.
+Welcome to your comprehensive guide on using nested categories in e-commerce! This guide delves into the implementation of nested categories and how they enhance the user experience and streamline administrative tasks in online stores. Whether you're a developer looking to optimize category management or aiming to improve your online store's navigation, this guide equips you with valuable insights and practical implementation details.
 
 ## Why Nested Categories Matter
 
-In the vast landscape of e-commerce, presenting products in a structured and organized manner is crucial for facilitating user navigation and enhancing the overall shopping experience. Traditional flat category structures often lead to cluttered interfaces and difficulties in finding specific products. Nested categories offer a solution by organizing products into a hierarchical structure, akin to the aisles and shelves in a physical store. By categorizing products into logical groups and subgroups, nested categories simplify the browsing process, guiding users to their desired items with ease.
+In the vast world of e-commerce, presenting products in a structured and organized manner is crucial for facilitating user navigation and enhancing the overall shopping experience. Traditional flat category structures often lead to cluttered interfaces and difficulties in finding specific products. Nested categories offer a solution by organizing products into a hierarchical structure, akin to the aisles and shelves in a physical store. By categorizing products into logical groups and subgroups, nested categories simplify the browsing process, guiding users effortlessly to their desired items.
 
 ## Understanding Nested Categories
 
-My project leverages nested categories to optimize user experiences and streamline category management. Built on the Next.js framework and powered by Prisma ORM for data management, it offers a seamless and intuitive browsing experience for users while providing administrators with powerful tools for managing categories and products.
+Nested categories organize products into a hierarchy with multiple levels. For instance, you might have a top-level category for "Electronics," followed by subcategories for "Laptops," "Tablets," and "Smartphones." Each subcategory can further branch out into even more specific categories, like "Gaming Laptops" under "Laptops." This hierarchical structure allows users to browse through related products progressively, narrowing down their search until they find what they're looking for.
 
 ## The Challenge of Complexity
 
-While nested categories offer clear benefits for user experience, managing an indefinite nesting structure can quickly become overwhelming for administrators. To address this challenge, I adopts a simplified approach by limiting nesting to three levels: main categories followed by two nested subcategories. This strategic decision strikes a balance between usability and manageability, ensuring that users can navigate through the category hierarchy effortlessly while simplifying administrative tasks for platform administrators.
+While nested categories offer clear benefits for user experience, managing an indefinite nesting structure can quickly become overwhelming for administrators. To address this challenge, a strategic approach is critical. I adopts a simplified approach by limiting nesting to three levels: main categories followed by two nested subcategories. This strategic decision strikes a balance between usability and manageability, ensuring that users can navigate through the category hierarchy effortlessly while simplifying administrative tasks for platform administrators.
 
 ## Solution Overview
 
 ![User's Interaction with dynamic rendering without using client components (useState react hook)](images/category-selection.png)
 
-### Database Structure
+This guide presents a solution that balances usability and manageability. Here's a breakdown of the key aspects:
 
-- **Prisma Self-Relationship:**
-  - We utilize Prisma's self-relationship feature to establish a hierarchical structure for organizing categories.
-  - Each category has an ID, a unique name, a list of associated products, and optional parent and children categories to establish the nesting hierarchy.
-  - By leveraging Prisma's capabilities, we ensure efficient data management and retrieval, enabling seamless category organization and navigation.
+- **Limited Nesting Levels:** The approach suggests limiting nesting to a specific number of levels, typically two or three. This maintains a user-friendly browsing experience while keeping administrative tasks manageable. Utilizing a database management system like Prisma allows for establishing a hierarchical relationship between categories through parent-child connections. Here, we utilize Prisma's self-relationship.
 
-### Administration Panel
+- **Administration Panel:** The administration panel provides a user-friendly interface for creating, editing, and managing nested categories. This includes features like dedicated sections for each level of the hierarchy and intuitive tools for adding and removing subcategories.
 
-- **Nested Categories Display:**
   - We divide the category display in the administration panel into three sections: parent categories, first-level subcategories, and second-level subcategories.
   - Each section includes buttons at the top to create new categories at that level, allowing administrators to easily manage the category hierarchy.
   - To create a new category nested under a specific parent category, the parent category must be selected, ensuring proper organization of categories.
   - By integrating server-side components and leveraging Next.js's server-side rendering capabilities, we achieve seamless interaction and category management without the need for client-side components.
   - We employ Next.js's server-side actions for category creation, enabling efficient and secure category management operations directly from the administration panel.
 
-### User Application
+- **User Application:** The user application seamlessly displays nested categories, highlighting the currently selected category and providing clear navigation options for users to browse through different levels.
 
-- **Highlighting Selected Category:**
   - Instead of using useState hooks to manage the selected category state, we utilize Next.js's routing capabilities.
   - When a category is selected, the URL is updated with search parameters representing the selected category ID.
   - By linking to the same page with updated search parameters, we achieve dynamic highlighting of the selected category without relying on client-side state management.
-  - This innovative approach enhances performance and simplifies code complexity, providing users with a seamless and intuitive category browsing experience.
+
+---
 
 ## Implementation Details
 
@@ -75,6 +71,8 @@ model Category {
 
 ### 2. Server Actions for Category Management
 
+Server-side actions handle tasks like adding and editing categories. These actions ensure authentication and permission checks, interact with the database using Prisma ORM, and trigger cache revalidation to update the user interface efficiently.
+
 #### Add Category
 
 ```typescript
@@ -106,7 +104,7 @@ export async function addCategory(formData: any) {
 - The `addCategory` function handles the creation of new categories.
 - It first checks if the user is authenticated (`isAuthenticted`) and has permission to add categories (`isAdmin`).
 - If authentication or permission fails, the function redirects the user to the appropriate page with an error message.
-- It utilizes Prisma ORM (`getExtendedPrisma`) to interact with the database and create a new category using the provided form data.
+- It utilizes Prisma ORM (`getExtendedPrisma`) to interact with the database and create a new category using the provided form data. Here, I called (`getExtendedPrisma`) function to get prisma instance. Later, I will disclouse the purpose of this function.
 - After successful category creation, it triggers a cache revalidation to update the UI.
 
 **Approach Rationale:**
@@ -146,6 +144,8 @@ export async function editCategory(catId: number, newName: string) {
 
 ### 3. Category Management Components
 
+The user interface for managing categories is typically divided into modular components like modal forms for adding new categories and category tables for displaying and editing existing categories. These components leverage UI libraries and frameworks for consistent styling and user interaction.
+
 #### ModalForm Component
 
 ```jsx
@@ -182,7 +182,7 @@ export default function ModalForm({
 
 **Explanation:**
 
-- The `ModalForm` component renders a modal form for adding new categories.
+- The `ModalForm` component renders a modal form for adding new categories. This modal component is rendered by Next.js's parallel routing functionality. I leave out some of the component codes for simplicity since our foucs here is implementation of nesting categories.
 - It imports the `addCategory` action to handle category creation.
 - Utilizes UI components like `Card`, `Input`, and `Label` for styling and input fields.
 - Uses `useToast` hook for displaying success or error messages to the user.
@@ -353,13 +353,15 @@ export default async function CategoryTable({
 
 Let's break down the main functions in the `CategoryTable` component!
 
+#### Code Breakdown
+
 1. **Fetching Categories:**
 
 ```typescript
 const categories = await getCategories();
 ```
 
-This line fetches the list of categories from the backend using the `getCategories` function. It awaits the result of the asynchronous operation to ensure that the categories are retrieved before proceeding.
+This line fetches the list of categories from the backend using the `getCategories` function. It awaits the result of the asynchronous operation to ensure that the categories are retrieved before proceeding. Since this whole component is rendered on sever side, we have direct access to database and could prefetch all necessary data at the time of rendering the components.
 
 2. **Parsing Search Parameters:**
 
@@ -436,7 +438,7 @@ Overall, the `CategoryTable` component dynamically renders categories based on s
 
 ## Results and Analysis
 
-The implementation of nested categories in my project has resulted in a more structured and organized browsing experience for users. By limiting nesting to three levels, the platform strikes a balance between usability and manageability, ensuring ease of navigation for users while simplifying administrative tasks for administrators.
+Implementing nested categories with a limited nesting structure can significantly improve user experience by simplifying product browsing. It also streamlines administrative tasks by offering a clear and manageable approach to category management.
 
 ## Conclusion
 
@@ -448,6 +450,6 @@ Nested categories play a crucial role in enhancing user experiences and streamli
 
 **Contact:** <phyopyaemaung1@gmail.com> or <htetaung251220@gmail.com>
 
-**Tags:** E-commerce, Nested Categories, Category Management, Next.js, Prisma ORM.
+**Tags:** E-commerce, Nested Categories, Category Management, [`Next.js`, `Prisma ORM`, `Next Auth`]
 
 **Date:** February 28, 2024
